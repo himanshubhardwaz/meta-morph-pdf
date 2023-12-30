@@ -1,0 +1,18 @@
+# Rust
+/target/
+Cargo.lock
+.env
+
+# VS Code
+.vscode/
+
+# Compiled files
+*.rs.bk
+
+# OS-generated files
+.DS_Store
+Thumbs.db
+
+# Documentation
+/target/doc/
+/doc/
