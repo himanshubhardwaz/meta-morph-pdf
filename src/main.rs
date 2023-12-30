@@ -1,20 +1,17 @@
-use std::io;
+mod lib {
+    pub mod add_meta_tags;
+    pub mod config;
+}
 
-use meta_morph_pdf::validate_file;
-use meta_morph_pdf::Config;
+use lib::add_meta_tags;
+use lib::config::Config;
 
 fn main() {
-    println!("Enter the filename:");
+    let mut config = Config::new();
 
-    let mut filename = String::new();
-    io::stdin()
-        .read_line(&mut filename)
-        .expect("Failed to read line");
+    config.read_and_validate_filename();
 
-    filename = filename.trim().to_string();
+    config.fetch_remaining_args();
 
-    match validate_file(&filename) {
-        Ok(_) => println!("Valid file"),
-        Err(err) => eprintln!("{}", err),
-    }
+    add_meta_tags::add_meta_tags(&config);
 }
