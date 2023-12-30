@@ -1,5 +1,6 @@
 use std::io;
 
+use meta_morph_pdf::validate_file;
 use meta_morph_pdf::Config;
 
 fn main() {
@@ -12,5 +13,8 @@ fn main() {
 
     filename = filename.trim().to_string();
 
-    meta_morph_pdf::run(filename);
+    match validate_file(&filename) {
+        Ok(_) => println!("Valid file"),
+        Err(err) => eprintln!("{}", err),
+    }
 }
