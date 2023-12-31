@@ -67,11 +67,23 @@ impl Config {
             .map(|s| s.trim().to_string())
             .collect();
 
-        println!("Enter new pdf file name: ");
+        loop {
+            println!("Enter new pdf file name: ");
 
-        io::stdin()
-            .read_line(&mut self.export_filename)
-            .expect("Failed to read line");
+            let mut export_filename_input = String::new();
+
+            io::stdin()
+                .read_line(&mut export_filename_input)
+                .expect("Failed to read line");
+
+            match validate_export_filename_input(&export_filename_input) {
+                Ok(_) => {
+                    self.export_filename = export_filename_input;
+                    break;
+                }
+                Err(msg) => println!("Cannot set this as export filename: {}", msg),
+            }
+        }
     }
 }
 
@@ -87,4 +99,14 @@ fn validate_file(filename: &str) -> Result<(), Box<dyn Error>> {
         }
     }
     Err(format!("Error: '{}' is not a valid PDF file.", filename).into())
+}
+
+fn validate_export_filename_input(filename: &str) -> Result<(), Box<dyn Error>> {
+    if let Ok(metadata) = fs::metadata(filename) {
+        if metadata.is_file() {
+            return Err(format!("A file with this name already exists.").into());
+        }
+    }
+
+    Ok(())
 }
