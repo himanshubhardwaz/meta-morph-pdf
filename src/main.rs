@@ -13,5 +13,8 @@ fn main() {
 
     config.fetch_remaining_args();
 
-    add_meta_tags::add_meta_tags(&config);
+    match add_meta_tags::add_meta_tags(&config) {
+        Ok(_) => println!("Successfully generated pdf with meta tags"),
+        Err(msg) => println!("Error generating pdf: {}", msg),
+    }
 }

@@ -3,24 +3,21 @@ use std::fs;
 use std::io;
 use std::process;
 
-#[derive(Debug)]
+#[derive(Debug, Default)]
 pub struct Config {
-    filename: String,
-    title: String,
-    author: String,
-    subject: String,
-    keywords: String,
+    pub filename: String,
+    pub title: String,
+    pub author: String,
+    pub subject: String,
+    pub keywords: Vec<String>,
+    pub export_filename: String,
 }
 
 impl Config {
-    pub fn new() -> Config {
-        Config {
-            filename: String::new(),
-            title: String::new(),
-            author: String::new(),
-            subject: String::new(),
-            keywords: String::new(),
-        }
+    pub fn new() -> Self {
+        let mut config: Config = Default::default();
+        config.export_filename = "custom_export_filename".to_string();
+        config
     }
 
     pub fn read_and_validate_filename(&mut self) {
@@ -59,8 +56,21 @@ impl Config {
 
         println!("Enter keywords seperated by commas(,): ");
 
+        let mut keywords_input = String::new();
+
         io::stdin()
-            .read_line(&mut self.keywords)
+            .read_line(&mut keywords_input)
+            .expect("Failed to read line");
+
+        self.keywords = keywords_input
+            .split(",")
+            .map(|s| s.trim().to_string())
+            .collect();
+
+        println!("Enter new pdf file name: ");
+
+        io::stdin()
+            .read_line(&mut self.export_filename)
             .expect("Failed to read line");
     }
 }
