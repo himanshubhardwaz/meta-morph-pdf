@@ -2,7 +2,7 @@ use crate::lib::config::Config;
 use lopdf::{Dictionary, Document, Object};
 use std::error::Error;
 
-pub fn add_metadata(config: &Config) -> Result<(), Box<dyn Error>> {
+pub fn main(config: &Config) -> Result<(), Box<dyn Error>> {
     let mut doc = Document::load(&config.filename)?;
 
     let metadata = Object::Dictionary({
