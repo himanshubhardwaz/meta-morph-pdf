@@ -1,9 +1,9 @@
 mod lib {
-    pub mod add_meta_tags;
+    pub mod add_metadata;
     pub mod config;
 }
 
-use lib::add_meta_tags;
+use lib::add_metadata;
 use lib::config::Config;
 
 fn main() {
@@ -13,7 +13,7 @@ fn main() {
 
     config.fetch_remaining_args();
 
-    match add_meta_tags::add_meta_tags(&config) {
+    match add_metadata::add_metadata(&config) {
         Ok(_) => println!("Successfully generated pdf with meta tags"),
         Err(msg) => println!("Error generating pdf: {}", msg),
     }

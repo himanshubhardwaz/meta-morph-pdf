@@ -9,7 +9,7 @@ pub struct Config {
     pub title: String,
     pub author: String,
     pub subject: String,
-    pub keywords: Vec<String>,
+    pub keywords: String,
     pub export_filename: String,
 }
 
@@ -60,16 +60,9 @@ impl Config {
 
         println!("Enter keywords seperated by commas(,): ");
 
-        let mut keywords_input = String::new();
-
         io::stdin()
-            .read_line(&mut keywords_input)
+            .read_line(&mut self.keywords)
             .expect("Failed to read line");
-
-        self.keywords = keywords_input
-            .split(",")
-            .map(|s| s.trim().to_string())
-            .collect();
 
         loop {
             println!("Enter new pdf file name: ");
