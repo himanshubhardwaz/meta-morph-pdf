@@ -21,19 +21,23 @@ impl Config {
     }
 
     pub fn read_and_validate_filename(&mut self) {
-        println!("Enter the filename: ");
+        loop {
+            println!("Enter the filename: ");
 
-        io::stdin()
-            .read_line(&mut self.filename)
-            .expect("Failed to read line");
+            io::stdin()
+                .read_line(&mut self.filename)
+                .expect("Failed to read line");
 
-        self.filename = self.filename.trim().to_string();
+            self.filename = self.filename.trim().to_string();
 
-        match validate_file(&self.filename) {
-            Ok(_) => println!("Valid file"),
-            Err(err) => {
-                eprintln!("{}", err);
-                process::exit(1);
+            match validate_file(&self.filename) {
+                Ok(_) => {
+                    break;
+                }
+                Err(err) => {
+                    eprintln!("{}", err);
+                    process::exit(1);
+                }
             }
         }
     }
@@ -76,12 +80,16 @@ impl Config {
                 .read_line(&mut export_filename_input)
                 .expect("Failed to read line");
 
+            if export_filename_input[(&export_filename_input.len() - 4)..].to_string() != ".pdf" {
+                export_filename_input += ".pdf";
+            }
+
             match validate_export_filename_input(&export_filename_input) {
                 Ok(_) => {
                     self.export_filename = export_filename_input;
                     break;
                 }
-                Err(msg) => println!("Cannot set this as export filename: {}", msg),
+                Err(msg) => eprintln!("Cannot set this as export filename: {}", msg),
             }
         }
     }
